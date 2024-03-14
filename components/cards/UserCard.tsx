@@ -1,7 +1,10 @@
 "use client";
+
 import Image from "next/image";
-import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
+
+import { Button } from "../ui/button";
+
 interface Props {
   id: string;
   name: string;
@@ -10,34 +13,43 @@ interface Props {
   personType: string;
 }
 
-const UserCard = ({ id, name, username, imgUrl, personType }: Props) => {
+function UserCard({ id, name, username, imgUrl, personType }: Props) {
   const router = useRouter();
 
-  return (
-    <article className="user-card">
-      <div className="user-card_avatar">
-        <Image
-          src={imgUrl}
-          alt="logo"
-          width={48}
-          height={48}
-          className="rounded-full"
-        />
+  const isCommunity = personType === "Community";
 
-        <div className="flex-1 text-ellipsis">
-          <h4 className="text-base-semibold text-light-1">{name}</h4>
-          <p className="text-small-medium text-gray-1">@{username}</p>
+  return (
+    <article className='user-card'>
+      <div className='user-card_avatar'>
+        <div className='relative h-12 w-12'>
+          <Image
+            src={imgUrl}
+            alt='user_logo'
+            fill
+            className='rounded-full object-cover'
+          />
+        </div>
+
+        <div className='flex-1 text-ellipsis'>
+          <h4 className='text-base-semibold text-light-1'>{name}</h4>
+          <p className='text-small-medium text-gray-1'>@{username}</p>
         </div>
       </div>
 
       <Button
-        className="bg-gradient-to-r from-cyan-500 via-violet-600 to-fuchsia-950bg-primary-500"
-        onClick={() => router.push(`/profile/${id}`)}
+        className='user-card_btn'
+        onClick={() => {
+          if (isCommunity) {
+            router.push(`/communities/${id}`);
+          } else {
+            router.push(`/profile/${id}`);
+          }
+        }}
       >
-        view
+        View
       </Button>
     </article>
   );
-};
+}
 
 export default UserCard;
