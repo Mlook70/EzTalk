@@ -18,15 +18,15 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-import { CommentValidation } from "@/lib/validation/thread";
-import { addCommentToThread } from "@/lib/actions/thread.action";
+import { CommentValidation } from "@/lib/validation/toky";
+import { addCommentToToky } from "@/lib/actions/toky.action";
 
 interface Props {
-  threadId: string;
+  tokyId: string;
   currentUserImg: string;
   currentUserId: string;
 }
-const Comment = ({ threadId, currentUserImg, currentUserId }: Props) => {
+const Comment = ({ tokyId: tokyId, currentUserImg, currentUserId }: Props) => {
   const router = useRouter();
   const pathname = usePathname();
 
@@ -35,14 +35,14 @@ const Comment = ({ threadId, currentUserImg, currentUserId }: Props) => {
   const form = useForm<z.infer<typeof CommentValidation>>({
     resolver: zodResolver(CommentValidation),
     defaultValues: {
-      thread: "",
+      toky: "",
     },
   });
 
   const onSubmit = async (values: z.infer<typeof CommentValidation>) => {
-    await addCommentToThread(
-      threadId,
-      values.thread,
+    await addCommentToToky(
+      tokyId,
+      values.toky,
       JSON.parse(currentUserId),
       pathname
     );
@@ -53,7 +53,7 @@ const Comment = ({ threadId, currentUserImg, currentUserId }: Props) => {
       <form className="comment-form" onSubmit={form.handleSubmit(onSubmit)}>
         <FormField
           control={form.control}
-          name="thread"
+          name="toky"
           render={({ field }) => (
             <FormItem className="flex w-full items-center gap-3">
               <FormLabel>
@@ -78,7 +78,7 @@ const Comment = ({ threadId, currentUserImg, currentUserId }: Props) => {
         />
 
         <Button
-          className="bg-gradient-to-r from-cyan-500 via-violet-600 to-fuchsia-950bg-primary-500"
+          className="bg-gradient-to-r from-violet-800 via-blue-700 to-sky-500"
           type="submit"
         >
           Reply

@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { formatDateString } from "@/lib/utils";
-import DeleteThread from "../forms/DeleteThread";
+import DeleteToky from "../forms/DeleteToky";
 
 interface Props {
   id: string;
@@ -28,7 +28,7 @@ interface Props {
   isComment?: boolean;
 }
 
-function ThreadCard({
+function TokyCard({
   id,
   currentUserId,
   parentId,
@@ -78,7 +78,7 @@ function ThreadCard({
                   height={24}
                   className='cursor-pointer object-contain'
                 />
-                <Link href={`/thread/${id}`}>
+                <Link href={`/toky/${id}`}>
                   <Image
                     src='/assets/reply.svg'
                     alt='heart'
@@ -104,7 +104,7 @@ function ThreadCard({
               </div>
 
               {isComment && comments.length > 0 && (
-                <Link href={`/thread/${id}`}>
+                <Link href={`/toky/${id}`}>
                   <p className='mt-1 text-subtle-medium text-gray-1'>
                     {comments.length} repl{comments.length > 1 ? "ies" : "y"}
                   </p>
@@ -114,8 +114,8 @@ function ThreadCard({
           </div>
         </div>
 
-        <DeleteThread
-          threadId={JSON.stringify(id)}
+        <DeleteToky
+          tokyId={JSON.stringify(id)}
           currentUserId={currentUserId}
           authorId={author.id}
           parentId={parentId}
@@ -136,7 +136,7 @@ function ThreadCard({
             />
           ))}
 
-          <Link href={`/thread/${id}`}>
+          <Link href={`/toky/${id}`}>
             <p className='mt-1 text-subtle-medium text-gray-1'>
               {comments.length} repl{comments.length > 1 ? "ies" : "y"}
             </p>
@@ -167,4 +167,4 @@ function ThreadCard({
   );
 }
 
-export default ThreadCard;
+export default TokyCard;

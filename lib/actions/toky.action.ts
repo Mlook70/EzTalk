@@ -7,7 +7,7 @@ import { connectToDB } from "../mongoose";
 import User from "../models/user.model";
 
 import Community from "../models/community.model";
-import Thread from "../models/thread.models";
+import Toky from "../models/toky.models";
 
 export async function fetchPosts(pageNumber = 1, pageSize = 20) {
   connectToDB();
@@ -16,7 +16,7 @@ export async function fetchPosts(pageNumber = 1, pageSize = 20) {
   const skipAmount = (pageNumber - 1) * pageSize;
 
   // Create a query to fetch the posts that have no parent (top-level threads) (a thread that is not a comment/reply).
-  const postsQuery = Thread.find({ parentId: { $in: [null, undefined] } })
+  const postsQuery = Toky.find({ parentId: { $in: [null, undefined] } })
     .sort({ createdAt: "desc" })
     .skip(skipAmount)
     .limit(pageSize)
@@ -38,7 +38,7 @@ export async function fetchPosts(pageNumber = 1, pageSize = 20) {
     });
 
   // Count the total number of top-level posts (threads) i.e., threads that are not comments.
-  const totalPostsCount = await Thread.countDocuments({
+  const totalPostsCount = await Toky.countDocuments({
     parentId: { $in: [null, undefined] },
   }); // Get the total count of posts
 
@@ -56,7 +56,7 @@ interface Params {
   path: string,
 }
 
-export async function createThread({ text, author, communityId, path }: Params
+export async function createToky({ text, author, communityId, path }: Params
 ) {
   try {
     connectToDB();
@@ -66,7 +66,7 @@ export async function createThread({ text, author, communityId, path }: Params
       { _id: 1 }
     );
 
-    const createdThread = await Thread.create({
+    const createdToky = await Toky.create({
       text,
       author,
       community: communityIdObject, // Assign communityId if provided, or leave it null for personal account
@@ -74,95 +74,95 @@ export async function createThread({ text, author, communityId, path }: Params
 
     // Update User model
     await User.findByIdAndUpdate(author, {
-      $push: { threads: createdThread._id },
+      $push: { tokies: createdToky._id },
     });
 
     if (communityIdObject) {
       // Update Community model
       await Community.findByIdAndUpdate(communityIdObject, {
-        $push: { threads: createdThread._id },
+        $push: { tokies: createdToky._id },
       });
     }
 
     revalidatePath(path);
   } catch (error: any) {
-    throw new Error(`Failed to create thread: ${error.message}`);
+    throw new Error(`Failed to create toky: ${error.message}`);
   }
 }
 
-async function fetchAllChildThreads(threadId: string): Promise<any[]> {
-  const childThreads = await Thread.find({ parentId: threadId });
+async function fetchAllChildTokies(tokyId: string): Promise<any[]> {
+  const childTokies = await Toky.find({ parentId: tokyId });
 
-  const descendantThreads = [];
-  for (const childThread of childThreads) {
-    const descendants = await fetchAllChildThreads(childThread._id);
-    descendantThreads.push(childThread, ...descendants);
+  const descendantTokies = [];
+  for (const childToky of childTokies) {
+    const descendants = await fetchAllChildTokies(childToky._id);
+    descendantTokies.push(childToky, ...descendants);
   }
 
-  return descendantThreads;
+  return descendantTokies;
 }
 
-export async function deleteThread(id: string, path: string): Promise<void> {
+export async function deleteToky(id: string, path: string): Promise<void> {
   try {
     connectToDB();
 
     // Find the thread to be deleted (the main thread)
-    const mainThread = await Thread.findById(id).populate("author community");
+    const mainToky = await Toky.findById(id).populate("author community");
 
-    if (!mainThread) {
-      throw new Error("Thread not found");
+    if (!mainToky) {
+      throw new Error("Toky not found");
     }
 
     // Fetch all child threads and their descendants recursively
-    const descendantThreads = await fetchAllChildThreads(id);
+    const descendantTokies = await fetchAllChildTokies(id);
 
     // Get all descendant thread IDs including the main thread ID and child thread IDs
-    const descendantThreadIds = [
+    const descendantTokyIds = [
       id,
-      ...descendantThreads.map((thread) => thread._id),
+      ...descendantTokies.map((toky) => toky._id),
     ];
 
     // Extract the authorIds and communityIds to update User and Community models respectively
     const uniqueAuthorIds = new Set(
       [
-        ...descendantThreads.map((thread) => thread.author?._id?.toString()), // Use optional chaining to handle possible undefined values
-        mainThread.author?._id?.toString(),
+        ...descendantTokies.map((toky) => toky.author?._id?.toString()), // Use optional chaining to handle possible undefined values
+        mainToky.author?._id?.toString(),
       ].filter((id) => id !== undefined)
     );
 
     const uniqueCommunityIds = new Set(
       [
-        ...descendantThreads.map((thread) => thread.community?._id?.toString()), // Use optional chaining to handle possible undefined values
-        mainThread.community?._id?.toString(),
+        ...descendantTokies.map((toky) => toky.community?._id?.toString()), // Use optional chaining to handle possible undefined values
+        mainToky.community?._id?.toString(),
       ].filter((id) => id !== undefined)
     );
 
     // Recursively delete child threads and their descendants
-    await Thread.deleteMany({ _id: { $in: descendantThreadIds } });
+    await Toky.deleteMany({ _id: { $in: descendantTokyIds } });
 
     // Update User model
     await User.updateMany(
       { _id: { $in: Array.from(uniqueAuthorIds) } },
-      { $pull: { threads: { $in: descendantThreadIds } } }
+      { $pull: { tokies: { $in: descendantTokyIds } } }
     );
 
     // Update Community model
     await Community.updateMany(
       { _id: { $in: Array.from(uniqueCommunityIds) } },
-      { $pull: { threads: { $in: descendantThreadIds } } }
+      { $pull: { tokies: { $in: descendantTokyIds } } }
     );
 
     revalidatePath(path);
   } catch (error: any) {
-    throw new Error(`Failed to delete thread: ${error.message}`);
+    throw new Error(`Failed to delete toky: ${error.message}`);
   }
 }
 
-export async function fetchThreadById(threadId: string) {
+export async function fetchTokyById(tokyId: string) {
   connectToDB();
 
   try {
-    const thread = await Thread.findById(threadId)
+    const toky = await Toky.findById(tokyId)
       .populate({
         path: "author",
         model: User,
@@ -183,7 +183,7 @@ export async function fetchThreadById(threadId: string) {
           },
           {
             path: "children", // Populate the children field within children
-            model: Thread, // The model of the nested children (assuming it's the same "Thread" model)
+            model: Toky, // The model of the nested children (assuming it's the same "Thread" model)
             populate: {
               path: "author", // Populate the author field within nested children
               model: User,
@@ -194,15 +194,15 @@ export async function fetchThreadById(threadId: string) {
       })
       .exec();
 
-    return thread;
+    return toky;
   } catch (err) {
-    console.error("Error while fetching thread:", err);
-    throw new Error("Unable to fetch thread");
+    console.error("Error while fetching toky:", err);
+    throw new Error("Unable to fetch toky");
   }
 }
 
-export async function addCommentToThread(
-  threadId: string,
+export async function addCommentToToky(
+  tokyId: string,
   commentText: string,
   userId: string,
   path: string
@@ -211,27 +211,27 @@ export async function addCommentToThread(
 
   try {
     // Find the original thread by its ID
-    const originalThread = await Thread.findById(threadId);
+    const originalToky = await Toky.findById(tokyId);
 
-    if (!originalThread) {
-      throw new Error("Thread not found");
+    if (!originalToky) {
+      throw new Error("Toky not found");
     }
 
     // Create the new comment thread
-    const commentThread = new Thread({
+    const commentToky = new Toky({
       text: commentText,
       author: userId,
-      parentId: threadId, // Set the parentId to the original thread's ID
+      parentId: tokyId, // Set the parentId to the original thread's ID
     });
 
     // Save the comment thread to the database
-    const savedCommentThread = await commentThread.save();
+    const savedCommentToky = await commentToky.save();
 
     // Add the comment thread's ID to the original thread's children array
-    originalThread.children.push(savedCommentThread._id);
+    originalToky.children.push(savedCommentToky._id);
 
     // Save the updated original thread to the database
-    await originalThread.save();
+    await originalToky.save();
 
     revalidatePath(path);
   } catch (err) {

@@ -23,7 +23,7 @@ export default function RootLayout({
             </head>
                 <body className={`${inter.className} 
                                 flex justify-center items-center h-screen
-                                bg-dark-1
+                                bg-[url('/assets/EzTalkBg.png')] bg-cover bg-center
                                 `}>
                     {children}
                 </body>

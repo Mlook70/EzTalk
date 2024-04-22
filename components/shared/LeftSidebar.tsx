@@ -27,7 +27,7 @@ const LeftSidebar = () => {
               className={`leftsidebar_link 
                                     ${
                                       isActive &&
-                                      "bg-gradient-to-r from-cyan-500 via-violet-600 to-fuchsia-950"
+                                      "bg-gradient-to-r from-violet-800 via-blue-700 to-sky-500 "
                                     }`}
             >
               <Image

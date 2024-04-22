@@ -1,5 +1,5 @@
-import ThreadCard from "@/components/cards/ThreadCard";
-import { fetchThreadById } from "@/lib/actions/thread.action";
+import TokyCard from "@/components/cards/TokyCard";
+import { fetchTokyById } from "@/lib/actions/toky.action";
 import { fetchUser } from "@/lib/actions/user.action";
 import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
@@ -13,35 +13,35 @@ const Page = async ({ params }: { params: { id: string } }) => {
   const userInfo = await fetchUser(user.id);
   if (!userInfo?.onboarded) redirect("/onboarding");
 
-  const thread = await fetchThreadById(params.id);
+  const toky = await fetchTokyById(params.id);
 
   return (
     <section className="relative">
       <div>
-        <ThreadCard
-          key={thread._id}
-          id={thread._id}
+        <TokyCard
+          key={toky._id}
+          id={toky._id}
           currentUserId={user?.id || ""}
-          parentId={thread.parentId}
-          content={thread.text}
-          author={thread.author}
-          community={thread.community}
-          createdAt={thread.createdAt}
-          comments={thread.children}
+          parentId={toky.parentId}
+          content={toky.text}
+          author={toky.author}
+          community={toky.community}
+          createdAt={toky.createdAt}
+          comments={toky.children}
         />
       </div>
 
       <div className="mt-7">
         <Comment
-          threadId={thread.id}
+          tokyId={toky.id}
           currentUserImg={userInfo.image}
           currentUserId={JSON.stringify(userInfo._id)}
         />
       </div>
 
       <div className="mt-10">
-        {thread.children.map((childItem: any) => (
-          <ThreadCard
+        {toky.children.map((childItem: any) => (
+          <TokyCard
             key={childItem._id}
             id={childItem._id}
             currentUserId={user?.id || ""}

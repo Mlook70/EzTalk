@@ -209,7 +209,7 @@ const AccountProfile = ({user, btnTitle}: Props) => {
         />
 
 
-        <Button className='bg-gradient-to-r from-cyan-500 via-violet-600 to-fuchsia-950bg-primary-500' type="submit">Submit</Button>
+        <Button className='bg-gradient-to-r from-violet-800 via-blue-700 to-sky-500' type="submit">Submit</Button>
     </form>
     </Form>
     )

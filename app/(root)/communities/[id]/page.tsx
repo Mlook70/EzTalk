@@ -4,7 +4,7 @@ import { currentUser } from "@clerk/nextjs";
 import { communityTabs } from "@/constants";
 
 import UserCard from "@/components/cards/UserCard";
-import ThreadsTab from "@/components/shared/ThreadsTab";
+import TokiesTab from "@/components/shared/TokiesTab";
 import ProfileHeader from "@/components/shared/ProfileHeader";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -29,7 +29,7 @@ async function Page({ params }: { params: { id: string } }) {
       />
 
       <div className='mt-9'>
-        <Tabs defaultValue='threads' className='w-full'>
+        <Tabs defaultValue='tokies' className='w-full'>
           <TabsList className='tab'>
             {communityTabs.map((tab) => (
               <TabsTrigger key={tab.label} value={tab.value} className='tab'>
@@ -42,18 +42,18 @@ async function Page({ params }: { params: { id: string } }) {
                 />
                 <p className='max-sm:hidden'>{tab.label}</p>
 
-                {tab.label === "Threads" && (
+                {tab.label === "tokies" && (
                   <p className='ml-1 rounded-sm bg-light-4 px-2 py-1 !text-tiny-medium text-light-2'>
-                    {communityDetails.threads.length}
+                    {communityDetails.tokies.length}
                   </p>
                 )}
               </TabsTrigger>
             ))}
           </TabsList>
 
-          <TabsContent value='threads' className='w-full text-light-1'>
+          <TabsContent value='tokies' className='w-full text-light-1'>
             {/* @ts-ignore */}
-            <ThreadsTab
+            <TokiesTab
               currentUserId={user.id}
               accountId={communityDetails._id}
               accountType='Community'
@@ -77,7 +77,7 @@ async function Page({ params }: { params: { id: string } }) {
 
           <TabsContent value='requests' className='w-full text-light-1'>
             {/* @ts-ignore */}
-            <ThreadsTab
+            <TokiesTab
               currentUserId={user.id}
               accountId={communityDetails._id}
               accountType='Community'

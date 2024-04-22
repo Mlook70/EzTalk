@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Image from "next/image";
 import { profileTabs } from "@/constants";
-import ThreadsTab from "@/components/shared/ThreadsTab";
+import TokiesTab from "@/components/shared/TokiesTab";
 async function Page({ params }: { params: { id: string } }) {
   const user = await currentUser();
   if (!user) return null;
@@ -14,6 +14,7 @@ async function Page({ params }: { params: { id: string } }) {
   const userInfo = await fetchUser(params.id);
 
   if (!userInfo?.onboarded) redirect("/onboarding");
+
   return (
     <section>
       <ProfileHeader
@@ -26,7 +27,7 @@ async function Page({ params }: { params: { id: string } }) {
       />
 
       <div className="mt-9">
-        <Tabs defaultValue="threads" className="w-full">
+        <Tabs defaultValue="tokies" className="w-full">
           <TabsList className="tab">
             {profileTabs.map((tab) => (
               <TabsTrigger key={tab.label} value={tab.value} className="tab">
@@ -39,9 +40,9 @@ async function Page({ params }: { params: { id: string } }) {
                 />
                 <p className="max-sm:hidden">{tab.label}</p>
 
-                {tab.label === "Threads" && (
+                {tab.label === "tokies" && (
                   <p className="ml-1 rounded-sm bg-light-4 px-2 py-1 !text-tiny-medium text-light-2">
-                    {userInfo?.threads?.length}
+                    {userInfo?.tokies?.length}
                   </p>
                 )}
               </TabsTrigger>
@@ -54,7 +55,7 @@ async function Page({ params }: { params: { id: string } }) {
               className="w-full text-light-1"
             >
               {/* @ts-ignore */}
-              <ThreadsTab
+              <TokiesTab
                 currentUserId={user.id}
                 accountId={userInfo.id}
                 accountType="User"

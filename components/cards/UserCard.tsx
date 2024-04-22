@@ -30,14 +30,14 @@ function UserCard({ id, name, username, imgUrl, personType }: Props) {
           />
         </div>
 
-        <div className='flex-1 text-ellipsis'>
+        <div className='flex-1 text-ellipsis '>
           <h4 className='text-base-semibold text-light-1'>{name}</h4>
           <p className='text-small-medium text-gray-1'>@{username}</p>
         </div>
       </div>
 
       <Button
-        className='user-card_btn'
+        className='user-card_btn bg-gradient-to-r from-violet-800 via-blue-700 to-sky-500'
         onClick={() => {
           if (isCommunity) {
             router.push(`/communities/${id}`);

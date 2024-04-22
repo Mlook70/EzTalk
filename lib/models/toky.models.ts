@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const threadSchema = new mongoose.Schema({
+const tokySchema = new mongoose.Schema({
   text: {
     type: String,
     required: true,
@@ -24,11 +24,11 @@ const threadSchema = new mongoose.Schema({
   children: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Thread",
+      ref: "Toky",
     },
   ],
 });
 
-const Thread = mongoose.models.Thread || mongoose.model("Thread", threadSchema);
+const Toky = mongoose.models.Toky || mongoose.model("Toky", tokySchema);
 
-export default Thread;
+export default Toky;

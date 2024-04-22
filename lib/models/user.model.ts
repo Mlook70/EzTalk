@@ -18,10 +18,10 @@ const userSchema = new mongoose.Schema({
     },
     image: String,
     bio: String,
-    threads: [
+    tokies: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Thread",
+        ref: "Toky",
       },
     ],
     onboarded: {

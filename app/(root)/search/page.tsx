@@ -17,6 +17,8 @@ async function Page({
 
   const userInfo = await fetchUser(user.id);
   if (!userInfo?.onboarded) redirect("/onboarding");
+  
+  userInfo.image = user.imageUrl; // WAAIIITT
 
   const result = await fetchUsers({
     userId: user.id,
@@ -31,7 +33,7 @@ async function Page({
 
       <Searchbar routeType='search' />
 
-      <div className='mt-14 flex flex-col gap-9'>
+      <div className='mt-14 flex flex-col gap-9 '>
         {result.users.length === 0 ? (
           <p className='no-result'>No Result</p>
         ) : (

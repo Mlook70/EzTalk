@@ -8,7 +8,7 @@ import Community from "../models/community.model";
 import User from "../models/user.model";
 
 import { connectToDB } from "../mongoose";
-import Thread from "../models/thread.models";
+import Toky from "../models/toky.models";
 
 export async function fetchUser(userId: string) {
   try {
@@ -68,9 +68,9 @@ export async function fetchUserPosts(userId: string) {
     connectToDB();
 
     // Find all threads authored by the user with the given userId
-    const threads = await User.findOne({ id: userId }).populate({
-      path: "threads",
-      model: Thread,
+    const tokies = await User.findOne({ id: userId }).populate({
+      path: "tokies",
+      model: Toky,
       populate: [
         {
           path: "community",
@@ -79,7 +79,7 @@ export async function fetchUserPosts(userId: string) {
         },
         {
           path: "children",
-          model: Thread,
+          model: Toky,
           populate: {
             path: "author",
             model: User,
@@ -88,9 +88,9 @@ export async function fetchUserPosts(userId: string) {
         },
       ],
     });
-    return threads;
+    return tokies;
   } catch (error) {
-    console.error("Error fetching user threads:", error);
+    console.error("Error fetching user tokies:", error);
     throw error;
   }
 }
@@ -159,16 +159,16 @@ export async function getActivity(userId: string) {
     connectToDB();
 
     // Find all threads created by the user
-    const userThreads = await Thread.find({ author: userId });
+    const userTokies = await Toky.find({ author: userId });
 
     // Collect all the child thread ids (replies) from the 'children' field of each user thread
-    const childThreadIds = userThreads.reduce((acc, userThread) => {
-      return acc.concat(userThread.children);
+    const childTokyIds = userTokies.reduce((acc, userToky) => {
+      return acc.concat(userToky.children);
     }, []);
 
     // Find and return the child threads (replies) excluding the ones created by the same user
-    const replies = await Thread.find({
-      _id: { $in: childThreadIds },
+    const replies = await Toky.find({
+      _id: { $in: childTokyIds },
       author: { $ne: userId }, // Exclude threads authored by the same user
     }).populate({
       path: "author",

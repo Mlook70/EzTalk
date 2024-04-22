@@ -1,6 +1,6 @@
 import { UserButton, currentUser } from "@clerk/nextjs";
-import { fetchPosts } from "@/lib/actions/thread.action";
-import ThreadCard from "@/components/cards/ThreadCard";
+import { fetchPosts } from "@/lib/actions/toky.action";
+import TokyCard from "@/components/cards/TokyCard";
 
 const Home = async () => {
   const result = await fetchPosts(1, 30);
@@ -14,7 +14,7 @@ const Home = async () => {
         ) : (
           <>
             {result.posts.map((post) => (
-              <ThreadCard
+              <TokyCard
                 key={post._id}
                 id={post._id}
                 currentUserId={user?.id || ""}

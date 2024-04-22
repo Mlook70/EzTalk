@@ -1,21 +1,21 @@
 "use client";
 
-import { deleteThread } from "@/lib/actions/thread.action";
+import { deleteToky } from "@/lib/actions/toky.action";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 
 
 
 interface Props {
-  threadId: string;
+  tokyId: string;
   currentUserId: string;
   authorId: string;
   parentId: string | null;
   isComment?: boolean;
 }
 
-function DeleteThread({
-  threadId,
+function DeleteToky({
+  tokyId,
   currentUserId,
   authorId,
   parentId,
@@ -34,7 +34,7 @@ function DeleteThread({
       height={18}
       className='cursor-pointer object-contain'
       onClick={async () => {
-        await deleteThread(JSON.parse(threadId), pathname);
+        await deleteToky(JSON.parse(tokyId), pathname);
         if (!parentId || !isComment) {
           router.push("/");
         }
@@ -43,4 +43,4 @@ function DeleteThread({
   );
 }
 
-export default DeleteThread;
+export default DeleteToky;
