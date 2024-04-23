@@ -31,6 +31,11 @@ export const sidebarLinks = [
     route: "/profile",
     label: "Profile",
     },
+    {
+    imgURL: "/assets/eztalker.svg",
+    route: "/eztalker",
+    label: "EzTalker",
+    },
 ];
 
 export const profileTabs = [

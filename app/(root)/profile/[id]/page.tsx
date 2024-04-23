@@ -1,11 +1,12 @@
 import ProfileHeader from "@/components/shared/ProfileHeader";
 import { fetchUser } from "@/lib/actions/user.action";
-import { currentUser } from "@clerk/nextjs";
+import { currentUser, UserButton } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Image from "next/image";
 import { profileTabs } from "@/constants";
 import TokiesTab from "@/components/shared/TokiesTab";
+
 async function Page({ params }: { params: { id: string } }) {
   const user = await currentUser();
   if (!user) return null;
@@ -15,6 +16,9 @@ async function Page({ params }: { params: { id: string } }) {
 
   if (!userInfo?.onboarded) redirect("/onboarding");
 
+  // userInfo.image = user.imageUrl; //MLOOK IMAGE TEST
+  
+  
   return (
     <section>
       <ProfileHeader

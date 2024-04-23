@@ -1,5 +1,5 @@
 "use client"
-
+import { UserButton } from '@clerk/nextjs';
 import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
 import UserValidation from '@/lib/validation/user';
@@ -22,6 +22,7 @@ import { isBase64Image } from '@/lib/utils';
 import { useUploadThing } from '@/lib/uploadthing';
 import { updateUser } from '@/lib/actions/user.action';
 import { usePathname ,useRouter} from 'next/navigation';
+
 
 
 interface Props{
@@ -103,116 +104,140 @@ const AccountProfile = ({user, btnTitle}: Props) => {
             fileReader.readAsDataURL(file);
         }
         };
+
+        // const refreshPage = () => {
+        //     router.push('/profile/edit');
+        // };
     return (
-    <Form {...form}>
-    <form
-        onSubmit={form.handleSubmit(onSubmit)} 
-        className='flex flex-col justify-start gap-10'>
-        <FormField
-        control={form.control}
-        name="profile_photo"
-        render={({ field }) => (
-            <FormItem className='flex items-center gap-4'>
-            <FormLabel className='account-form_image-label'>
-            {field.value ? (
-                <Image
-                    src={field.value}
-                    alt='profile photo'
-                    width={96}
-                    height={96}
-                    priority
-                    className='rounded-full object-contain'
+        <div>
+            <Form {...form}>
+            <form
+                onSubmit={form.handleSubmit(onSubmit)} 
+                className='flex flex-col justify-start gap-10'>
+    
+                <FormField
+                control={form.control}
+                name="profile_photo"
+                render={({ field }) => (
+                    <FormItem className='flex items-center gap-4'>
+                    <FormLabel className='account-form_image-label'>
+                    {field.value ? (
+                        <Image
+                            src={field.value}
+                            alt='profile photo'
+                            width={96}
+                            height={96}
+                            priority
+                            className='rounded-full object-contain'
+                        />
+                    ) : (
+                        <Image
+                        src="/assets/profile.svg"
+                        alt='profile photo'
+                        width={24}
+                        height={24}
+                        className='object-contain'
+                    />
+                    )}
+                    </FormLabel>
+                    <FormControl className='flex-1 text-base-semibold text-gray-200'>
+                        <Input
+                            type='file'
+                            accept='image/*'
+                            placeholder='Add profile photo'
+                            className='account-form_image-input'
+                            onChange={(e) => handleImage(e, field.onChange)}
+                        />
+                    </FormControl>
+                    <FormMessage/>
+                    </FormItem>
+                )}
                 />
-            ) : (
-                <Image
-                src="/assets/profile.svg"
-                alt='profile photo'
-                width={24}
-                height={24}
-                className='object-contain'
-            />
-            )}
-            </FormLabel>
-            <FormControl className='flex-1 text-base-semibold text-gray-200'>
-                <Input
-                    type='file'
-                    accept='image/*'
-                    placeholder='Add profile photo'
-                    className='account-form_image-input'
-                    onChange={(e) => handleImage(e, field.onChange)}
+
+                {/* <FormField
+                    control={form.control}
+                    name='name'
+                    render={({ field }) => (
+                    <FormItem className='flex flex-col w-full gap-3'>
+                        <FormLabel className='text-base-semibold text-light-2'>
+                        If you want to edit your Photo, Password, Email, and more click on your small photo down bellow. <br/>  
+                        </FormLabel>
+                        <small className='text-light-2'> if you changed your photo don not forget to click on save. </small>
+                            <UserButton />
+                        <FormMessage/>
+                    </FormItem>
+                    )}
+                /> */}
+                <FormField
+                    control={form.control}
+                    name='name'
+                    render={({ field }) => (
+                    <FormItem className='flex flex-col w-full gap-3'>
+                        <FormLabel className='text-base-semibold text-light-2'>
+                        Name
+                        </FormLabel>
+                        <FormControl>
+                    
+                        <Input
+                            type='text'
+                            className='account-form_input no-focus'
+                            {...field}
+                        />
+                        </FormControl>
+                        <FormMessage/>
+                    </FormItem>
+                    )}
                 />
-            </FormControl>
-            <FormMessage/>
-            </FormItem>
-        )}
-        />
 
         <FormField
-            control={form.control}
-            name='name'
-            render={({ field }) => (
-            <FormItem className='flex flex-col w-full gap-3'>
-                <FormLabel className='text-base-semibold text-light-2'>
-                Name
-                </FormLabel>
-                <FormControl>
-               
-                <Input
-                    type='text'
-                    className='account-form_input no-focus'
-                    {...field}
+                    control={form.control}
+                    name='username'
+                    render={({ field }) => (
+                        <FormItem className='flex flex-col w-full gap-3'>
+                        <FormLabel className='text-base-semibold text-light-2'>
+                        Username
+                        </FormLabel>
+                        <FormControl>
+                        <Input
+                            type='text'
+                            className='account-form_input no-focus'
+                            {...field}
+                        />
+                        </FormControl>
+                        <FormMessage/>
+                    </FormItem>
+                    )}
                 />
-                </FormControl>
-                <FormMessage/>
-            </FormItem>
-            )}
-        />
 
-<FormField
-            control={form.control}
-            name='username'
-            render={({ field }) => (
-                <FormItem className='flex flex-col w-full gap-3'>
-                <FormLabel className='text-base-semibold text-light-2'>
-                Username
-                </FormLabel>
-                <FormControl>
-                <Input
-                    type='text'
-                    className='account-form_input no-focus'
-                    {...field}
+        <FormField
+                    control={form.control}
+                    name='bio'
+                    render={({ field }) => (
+                        <FormItem className='flex flex-col w-full gap-3'>
+                        <FormLabel className='text-base-semibold text-light-2'>
+                        Bio
+                        </FormLabel>
+                        <FormControl>
+                        <Textarea
+                            rows={10}
+                            className='account-form_input no-focus'
+                            {...field}
+                        />
+                        </FormControl>
+                        <FormMessage/>
+                    </FormItem>
+                    )}
                 />
-                </FormControl>
-                <FormMessage/>
-            </FormItem>
-            )}
-        />
-
-<FormField
-            control={form.control}
-            name='bio'
-            render={({ field }) => (
-                <FormItem className='flex flex-col w-full gap-3'>
-                <FormLabel className='text-base-semibold text-light-2'>
-                Bio
-                </FormLabel>
-                <FormControl>
-                <Textarea
-                    rows={10}
-                    className='account-form_input no-focus'
-                    {...field}
-                />
-                </FormControl>
-                <FormMessage/>
-            </FormItem>
-            )}
-        />
-
-
-        <Button className='bg-gradient-to-r from-violet-800 via-blue-700 to-sky-500' type="submit">Submit</Button>
-    </form>
-    </Form>
-    )
+                <Button className='bg-gradient-to-r from-violet-800 via-blue-700 to-sky-500' type="submit">Submit</Button>
+            </form>
+            {/* <div className='pt-5 '>
+            <Button className='bg-gradient-to-r from-violet-800 via-blue-700 to-sky-500' onClick={refreshPage}>Save Changed 'do not forget to save your new photo'</Button>
+            </div> */}
+            
+            </Form>
+            
+        </div>
+        )
 
 }
 export default AccountProfile

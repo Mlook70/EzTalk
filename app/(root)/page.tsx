@@ -5,6 +5,7 @@ import TokyCard from "@/components/cards/TokyCard";
 const Home = async () => {
   const result = await fetchPosts(1, 30);
   const user = await currentUser();
+  
   return (
     <>
       <h1 className="head-text text-left">Home</h1>
@@ -30,7 +31,6 @@ const Home = async () => {
         )}
       </section>
       <div className="h-screen">
-        <UserButton />
       </div>
     </>
   );
