@@ -15,7 +15,7 @@ export async function fetchPosts(pageNumber = 1, pageSize = 20) {
   // Calculate the number of posts to skip based on the page number and page size.
   const skipAmount = (pageNumber - 1) * pageSize;
 
-  // Create a query to fetch the posts that have no parent (top-level threads) (a thread that is not a comment/reply).
+  // Create a query to fetch the posts that have no parent (top-level Tokies) (a Toky that is not a comment/reply).
   const postsQuery = Toky.find({ parentId: { $in: [null, undefined] } })
     .sort({ createdAt: "desc" })
     .skip(skipAmount)
@@ -37,7 +37,7 @@ export async function fetchPosts(pageNumber = 1, pageSize = 20) {
       },
     });
 
-  // Count the total number of top-level posts (threads) i.e., threads that are not comments.
+  // Count the total number of top-level posts (Tokies) i.e., Tokies that are not comments.
   const totalPostsCount = await Toky.countDocuments({
     parentId: { $in: [null, undefined] },
   }); // Get the total count of posts
@@ -50,14 +50,18 @@ export async function fetchPosts(pageNumber = 1, pageSize = 20) {
 }
 
 interface Params {
-  text: string,
-  author: string,
-  communityId: string | null,
-  path: string,
+  text: string;
+  author: string;
+  communityId: string | null;
+  path: string;
 }
 
-export async function createToky({ text, author, communityId, path }: Params
-) {
+export async function createToky({
+  text,
+  author,
+  communityId,
+  path,
+}: Params) {
   try {
     connectToDB();
 
@@ -74,19 +78,19 @@ export async function createToky({ text, author, communityId, path }: Params
 
     // Update User model
     await User.findByIdAndUpdate(author, {
-      $push: { tokies: createdToky._id },
+      $push: { Tokies: createdToky._id },
     });
 
     if (communityIdObject) {
       // Update Community model
       await Community.findByIdAndUpdate(communityIdObject, {
-        $push: { tokies: createdToky._id },
+        $push: { Tokies: createdToky._id },
       });
     }
 
     revalidatePath(path);
   } catch (error: any) {
-    throw new Error(`Failed to create toky: ${error.message}`);
+    throw new Error(`Failed to create Toky: ${error.message}`);
   }
 }
 
@@ -106,17 +110,17 @@ export async function deleteToky(id: string, path: string): Promise<void> {
   try {
     connectToDB();
 
-    // Find the thread to be deleted (the main thread)
+    // Find the Toky to be deleted (the main Toky)
     const mainToky = await Toky.findById(id).populate("author community");
 
     if (!mainToky) {
       throw new Error("Toky not found");
     }
 
-    // Fetch all child threads and their descendants recursively
+    // Fetch all child Tokies and their descendants recursively
     const descendantTokies = await fetchAllChildTokies(id);
 
-    // Get all descendant thread IDs including the main thread ID and child thread IDs
+    // Get all descendant Toky IDs including the main Toky ID and child Toky IDs
     const descendantTokyIds = [
       id,
       ...descendantTokies.map((toky) => toky._id),
@@ -137,7 +141,7 @@ export async function deleteToky(id: string, path: string): Promise<void> {
       ].filter((id) => id !== undefined)
     );
 
-    // Recursively delete child threads and their descendants
+    // Recursively delete child tokies and their descendants
     await Toky.deleteMany({ _id: { $in: descendantTokyIds } });
 
     // Update User model
@@ -154,7 +158,7 @@ export async function deleteToky(id: string, path: string): Promise<void> {
 
     revalidatePath(path);
   } catch (error: any) {
-    throw new Error(`Failed to delete toky: ${error.message}`);
+    throw new Error(`Failed to delete Toky: ${error.message}`);
   }
 }
 
@@ -183,7 +187,7 @@ export async function fetchTokyById(tokyId: string) {
           },
           {
             path: "children", // Populate the children field within children
-            model: Toky, // The model of the nested children (assuming it's the same "Thread" model)
+            model: Toky, // The model of the nested children (assuming it's the same "Toky" model)
             populate: {
               path: "author", // Populate the author field within nested children
               model: User,
@@ -196,8 +200,8 @@ export async function fetchTokyById(tokyId: string) {
 
     return toky;
   } catch (err) {
-    console.error("Error while fetching toky:", err);
-    throw new Error("Unable to fetch toky");
+    console.error("Error while fetching Toky:", err);
+    throw new Error("Unable to fetch Toky");
   }
 }
 
@@ -210,27 +214,27 @@ export async function addCommentToToky(
   connectToDB();
 
   try {
-    // Find the original thread by its ID
+    // Find the original Toky by its ID
     const originalToky = await Toky.findById(tokyId);
 
     if (!originalToky) {
       throw new Error("Toky not found");
     }
 
-    // Create the new comment thread
+    // Create the new comment Toky
     const commentToky = new Toky({
       text: commentText,
       author: userId,
-      parentId: tokyId, // Set the parentId to the original thread's ID
+      parentId: tokyId, // Set the parentId to the original Toky's ID
     });
 
-    // Save the comment thread to the database
+    // Save the comment Toky to the database
     const savedCommentToky = await commentToky.save();
 
-    // Add the comment thread's ID to the original thread's children array
+    // Add the comment Toky's ID to the original Toky's children array
     originalToky.children.push(savedCommentToky._id);
 
-    // Save the updated original thread to the database
+    // Save the updated original Toky to the database
     await originalToky.save();
 
     revalidatePath(path);

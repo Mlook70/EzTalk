@@ -51,10 +51,10 @@ async function TokiesTab({ currentUserId, accountId, accountType }: Props) {
   if (!result) {
     redirect("/");
   }
-
+  const reversedThreads = [...result.threads].reverse();
   return (
     <section className='mt-9 flex flex-col gap-10'>
-      {result.tokies.map((toky) => (
+      {reversedThreads.map((toky) => (
         <TokyCard
           key={toky._id}
           id={toky._id}
