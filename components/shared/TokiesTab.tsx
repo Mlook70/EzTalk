@@ -1,8 +1,7 @@
+
+
 import { redirect } from "next/navigation";
-
 import { fetchCommunityPosts } from "@/lib/actions/community.actions";
-
-
 import TokyCard from "../cards/TokyCard";
 import { fetchUserPosts } from "@/lib/actions/user.action";
 
@@ -30,6 +29,7 @@ interface Result {
         image: string;
       };
     }[];
+    imageurl: string; // Add imageurl to Result interface
   }[];
 }
 
@@ -77,6 +77,7 @@ async function TokiesTab({ currentUserId, accountId, accountType }: Props) {
           }
           createdAt={toky.createdAt}
           comments={toky.children}
+          imageurl={toky.imageurl} // Add imageurl prop
         />
       ))}
     </section>

@@ -8,6 +8,7 @@ import User from "../models/user.model";
 
 import Community from "../models/community.model";
 import Toky from "../models/toky.models";
+import mongoose from "mongoose";
 
 export async function fetchPosts(pageNumber = 1, pageSize = 20) {
   connectToDB();
@@ -54,9 +55,10 @@ interface Params {
   author: string,
   communityId: string | null,
   path: string,
+  image?:string;
 }
 
-export async function createToky({ text, author, communityId, path }: Params
+export async function createToky({ text, author, communityId, path,image }: Params
 ) {
   try {
     connectToDB();
@@ -69,7 +71,9 @@ export async function createToky({ text, author, communityId, path }: Params
     const createdToky = await Toky.create({
       text,
       author,
-      community: communityIdObject, // Assign communityId if provided, or leave it null for personal account
+      community: communityIdObject, 
+      image,
+      // Assign communityId if provided, or leave it null for personal account
     });
 
     // Update User model
@@ -156,7 +160,7 @@ export async function deleteToky(id: string, path: string): Promise<void> {
   } catch (error: any) {
     throw new Error(`Failed to delete toky: ${error.message}`);
   }
-}
+} 
 
 export async function fetchTokyById(tokyId: string) {
   connectToDB();
@@ -237,5 +241,72 @@ export async function addCommentToToky(
   } catch (err) {
     console.error("Error while adding comment:", err);
     throw new Error("Unable to add comment");
+  }
+}
+
+// actions.ts
+export async function fetchLikes(tokyId: string): Promise<number> {
+  try {
+    const toky = await Toky.findById(tokyId);
+    if (!toky) {
+      throw new Error('Toky not found');
+    }
+    return toky.likes.length; // Return the length of the likes array
+  } catch (error) {
+    console.error('Error while fetching likes:', error);
+    throw new Error('Unable to fetch likes');
+  }
+}
+
+
+export async function toggleLike(tokyId: string, userId: string): Promise<void> {
+  try {
+    const toky = await Toky.findById(tokyId);
+    if (!toky) {
+      throw new Error('Toky not found');
+    }
+    const index = toky.likes.indexOf(userId);
+    if (index !== -1) {
+      // User already liked, remove like
+      toky.likes.splice(index, 1);
+    } else {
+      // User not liked, add like
+      toky.likes.push(userId);
+    }
+    await toky.save();
+  } catch (error) {
+    console.error('Error while toggling like:', error);
+    throw new Error('Unable to toggle like');
+  }
+}
+
+
+export async function likeToky(tokyId: string, userId: string): Promise<void> {
+  try {
+    // Check if the provided tokyId is a valid ObjectId
+    if (!mongoose.Types.ObjectId.isValid(tokyId)) {
+      throw new Error('Invalid tokyId format');
+    }
+
+    // Your MongoDB query to like the toky
+    // Make sure to handle the tokyId properly in your query
+
+  } catch (error) {
+    console.error('Error while liking Toky:', error);
+    throw new Error('Unable to like Toky');
+  }
+}
+// toky.action.ts
+
+export async function checkIfLiked(tokyId: string, userId: string): Promise<boolean> {
+  try {
+    const toky = await Toky.findById(tokyId);
+    if (!toky) {
+      throw new Error('Toky not found');
+    }
+    return toky.likes.includes(userId); // Check if the userId is in the likes array
+  } catch (error) {
+    console.error('Error while checking if liked:', error);
+    throw new Error('Unable to check if liked');
   }
 }

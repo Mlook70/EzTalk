@@ -5,6 +5,9 @@ const tokySchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  image: {
+    type: String,
+},
   author: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
@@ -21,6 +24,11 @@ const tokySchema = new mongoose.Schema({
   parentId: {
     type: String,
   },
+  likes: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  }
+],
   children: [
     {
       type: mongoose.Schema.Types.ObjectId,

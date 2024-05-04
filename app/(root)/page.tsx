@@ -21,6 +21,7 @@ const Home = async () => {
                 currentUserId={user?.id || ""}
                 parentId={post.parent_id}
                 content={post.text}
+                imageurl={post.imageUrl} // Pass the image URL here
                 author={post.author}
                 community={post.community}
                 createdAt={post.createdAt}
