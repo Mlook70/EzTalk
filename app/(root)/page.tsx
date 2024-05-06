@@ -15,18 +15,18 @@ const Home = async () => {
         ) : (
           <>
             {result.posts.map((post) => (
-              <TokyCard
+                <TokyCard
                 key={post._id}
                 id={post._id}
                 currentUserId={user?.id || ""}
-                parentId={post.parent_id}
+                parentId={post.parentId}
                 content={post.text}
-                imageurl={post.imageUrl} // Pass the image URL here
                 author={post.author}
                 community={post.community}
                 createdAt={post.createdAt}
                 comments={post.children}
-              />
+                imageurl={post.image} // Pass the image URL here
+                />
             ))}
           </>
         )}
