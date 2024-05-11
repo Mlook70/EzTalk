@@ -121,6 +121,13 @@ function TokyCard({
             </div>
           </div>
         </div>
+        <DeleteToky
+          tokyId={JSON.stringify(id)}
+          currentUserId={currentUserId}
+          authorId={author.id}
+          parentId={parentId}
+          isComment={isComment}
+        />
         <div className="flex flex-col items-end">
           <p className="text-subtle-medium text-gray-1">
             {formatDateString(createdAt)}
