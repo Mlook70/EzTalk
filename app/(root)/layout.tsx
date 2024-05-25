@@ -7,7 +7,7 @@ import Topbar from "@/components/shared/Topbar";
 import Bottombar from "@/components/shared/Bottombar";
 import RightSidebar from "@/components/shared/RightSidebar";
 import LeftSidebar from "@/components/shared/LeftSidebar";
-
+import '@uploadthing/react/styles.css';
 
 
 export const metadata: Metadata = {

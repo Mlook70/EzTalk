@@ -4,6 +4,7 @@ import { fetchUser } from "@/lib/actions/user.action";
 import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import Comment from "@/components/forms/Comment";
+
 const Page = async ({ params }: { params: { id: string } }) => {
   if (!params.id) return null;
 
@@ -28,6 +29,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
           community={toky.community}
           createdAt={toky.createdAt}
           comments={toky.children}
+          imageurl={toky.image} // Pass the image URL here
         />
       </div>
 
@@ -51,6 +53,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
             community={childItem.community}
             createdAt={childItem.createdAt}
             comments={childItem.children}
+            imageurl={childItem.image} // Pass the image URL here
             isComment
           />
         ))}
