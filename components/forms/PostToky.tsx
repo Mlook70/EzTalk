@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { useOrganization } from "@clerk/nextjs";
 
 interface Props {
   userId: string;
@@ -23,6 +24,8 @@ const PostToky = ({ userId }: Props) => {
   const pathname = usePathname();
   const { startUpload } = useUploadThing('media');
   const [files, setFiles] = useState<File[]>([]);
+  const { organization } = useOrganization();
+
   const form = useForm({
     resolver: zodResolver(TokyValidation),
     defaultValues: {
@@ -48,7 +51,7 @@ const PostToky = ({ userId }: Props) => {
       text: values.toky,
       author: userId,
       image: values.image,
-      communityId: null,
+      communityId: organization ? organization.id : null,
       path: pathname,
     });
 
