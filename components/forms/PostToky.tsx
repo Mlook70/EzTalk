@@ -1,5 +1,4 @@
 
-
 "use client";
 import { useState, ChangeEvent } from 'react';
 import { useForm } from 'react-hook-form';
@@ -14,7 +13,6 @@ import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { useOrganization } from "@clerk/nextjs";
 
 interface Props {
   userId: string;
@@ -25,8 +23,6 @@ const PostToky = ({ userId }: Props) => {
   const pathname = usePathname();
   const { startUpload } = useUploadThing('media');
   const [files, setFiles] = useState<File[]>([]);
-  const { organization } = useOrganization();
-
   const form = useForm({
     resolver: zodResolver(TokyValidation),
     defaultValues: {
@@ -51,7 +47,8 @@ const PostToky = ({ userId }: Props) => {
     await createToky({
       text: values.toky,
       author: userId,
-      communityId: organization ? organization.id : null,
+      image: values.image,
+      communityId: null,
       path: pathname,
     });
 
@@ -85,7 +82,7 @@ const PostToky = ({ userId }: Props) => {
             <FormItem className="flex flex-col gap-3">
               <FormLabel className="text-base-semibold text-light-2">write your toky</FormLabel>
               <FormControl>
-                <Textarea {...field} rows={10} className="no-focus" />
+                <Textarea {...field} rows={10} className="no-focus text-light-1 outline-none bg-dark-2" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -100,7 +97,7 @@ const PostToky = ({ userId }: Props) => {
             <FormItem className="flex flex-col gap-3">
               <FormLabel className="text-base-semibold text-light-2">Add an image</FormLabel>
               <FormControl>
-                <Input type="file" accept="image/*" className="no-focus" onChange={handleImageChange} />
+                <Input type="file" accept="image/*" className="no-focus text-light-1 outline-none bg-dark-2" onChange={handleImageChange} />
               </FormControl>
               {field.value && (
                 <img src={field.value} alt="Preview" className="mt-2 h-48 w-full object-cover" />

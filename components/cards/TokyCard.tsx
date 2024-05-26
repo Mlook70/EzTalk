@@ -43,10 +43,10 @@ function TokyCard({
   return (
     <article
       className={`flex w-full flex-col rounded-xl ${
-        isComment ? "px-0 xs:px-7" : "bg-dark-2 p-7"
+        isComment ? "px-0 sm:px-4 md:px-7" : "bg-dark-2 p-4 md:p-7"
       }`}
     >
-      <div className="flex justify-between items-start">
+      <div className="flex flex-col sm:flex-row justify-between items-start">
         <div className="flex w-full flex-1 flex-row gap-4">
           <div className="flex flex-col items-center">
             <Link href={`/profile/${author.id}`} className="relative h-11 w-11">
@@ -73,12 +73,11 @@ function TokyCard({
                   alt="Post Image"
                   width={400}
                   height={400}
+                  className="w-full max-w-md"
                 />
               </div>
             )}
-            <div
-              className={`${isComment && "mb-10"} mt-5 flex flex-col gap-3`}
-            >
+            <div className={`${isComment && "mb-10"} mt-5 flex flex-col gap-3`}>
               <div className="flex gap-3.5">
                 <Image
                   src="/assets/heart-gray.svg"
@@ -97,13 +96,6 @@ function TokyCard({
                   />
                 </Link>
                 <Image
-                  src="/assets/repost.svg"
-                  alt="heart"
-                  width={24}
-                  height={24}
-                  className="cursor-pointer object-contain"
-                />
-                <Image
                   src="/assets/share.svg"
                   alt="heart"
                   width={24}
@@ -121,15 +113,15 @@ function TokyCard({
             </div>
           </div>
         </div>
-        <DeleteToky
-          tokyId={JSON.stringify(id)}
-          currentUserId={currentUserId}
-          authorId={author.id}
-          parentId={parentId}
-          isComment={isComment}
-        />
-        <div className="flex flex-col items-end">
-          <p className="text-subtle-medium text-gray-1">
+        <div className="flex flex-col items-end mt-3 sm:mt-0">
+          <DeleteToky
+            tokyId={JSON.stringify(id)}
+            currentUserId={currentUserId}
+            authorId={author.id}
+            parentId={parentId}
+            isComment={isComment}
+          />
+          <p className="text-subtle-medium text-gray-1 mt-2 sm:mt-0">
             {formatDateString(createdAt)}
           </p>
           {!isComment && community && (
