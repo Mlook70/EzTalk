@@ -1,4 +1,5 @@
 
+
 "use client";
 import { useState, ChangeEvent } from 'react';
 import { useForm } from 'react-hook-form';
@@ -50,7 +51,6 @@ const PostToky = ({ userId }: Props) => {
     await createToky({
       text: values.toky,
       author: userId,
-      image: values.image,
       communityId: organization ? organization.id : null,
       path: pathname,
     });
