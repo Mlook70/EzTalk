@@ -14,14 +14,9 @@ export const TokyValidation = z.object({
   image:z.string().url().nonempty(),
 });
 export const CommentValidation = z.object({
-  toky: z.string().nonempty().min(3, { message: "Minimum 3 characters." }),
-  comment: z.string().nonempty(),
-}
-);
-
-
-
-export const LikeValidation = z.object({
-  tokyId: z.string().nonempty(),
-  userId: z.string().nonempty(),
-}); 
+  toky: z.string().nonempty().min(3, { message: "Minimum 3 characters." })
+});
+// export const LikeValidation = z.object({
+//   tokyId: z.string().nonempty(),
+//   userId: z.string().nonempty(),
+// }); 

@@ -21,7 +21,7 @@ async function Page() {
     image: userInfo ? userInfo?.image : user.imageUrl,
   };
 
-  userData.image = user.imageUrl;
+  // userData.image = user.imageUrl;
   
 
   return (

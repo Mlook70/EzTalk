@@ -44,7 +44,7 @@ async function Page({ params }: { params: { id: string } }) {
                 />
                 <p className="max-sm:hidden">{tab.label}</p>
 
-                {tab.label === "Tokies" && (
+                {tab.label === "tokies" && (
                   <p className="ml-1 rounded-sm bg-light-4 px-2 py-1 !text-tiny-medium text-light-2">
                     {userInfo?.tokies?.length}
                   </p>

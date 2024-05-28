@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 
-import TypingAnimation from "@/components/TypingAnimation";
+// import TypingAnimation from "@/components/TypingAnimation";
 
 export default function Home() {
   const [userInput, setUserInput] = useState("");
