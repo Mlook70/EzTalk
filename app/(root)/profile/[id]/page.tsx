@@ -7,6 +7,7 @@ import Image from "next/image";
 import { profileTabs } from "@/constants";
 import TokiesTab from "@/components/shared/TokiesTab";
 
+
 async function Page({ params }: { params: { id: string } }) {
   const user = await currentUser();
   if (!user) return null;
@@ -17,7 +18,8 @@ async function Page({ params }: { params: { id: string } }) {
   if (!userInfo?.onboarded) redirect("/onboarding");
 
   // userInfo.image = user.imageUrl; //MLOOK IMAGE TEST
-  
+
+
   
   return (
     <section>
@@ -44,11 +46,12 @@ async function Page({ params }: { params: { id: string } }) {
                 />
                 <p className="max-sm:hidden">{tab.label}</p>
 
-                {tab.label === "tokies" && (
+                {tab.label === "Tokies" && (
                   <p className="ml-1 rounded-sm bg-light-4 px-2 py-1 !text-tiny-medium text-light-2">
                     {userInfo?.tokies?.length}
                   </p>
                 )}
+
               </TabsTrigger>
             ))}
           </TabsList>
