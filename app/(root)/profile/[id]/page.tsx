@@ -7,7 +7,6 @@ import Image from "next/image";
 import { profileTabs } from "@/constants";
 import TokiesTab from "@/components/shared/TokiesTab";
 
-
 async function Page({ params }: { params: { id: string } }) {
   const user = await currentUser();
   if (!user) return null;

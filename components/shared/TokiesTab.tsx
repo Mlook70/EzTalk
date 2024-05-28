@@ -12,6 +12,7 @@ interface Result {
   tokies: {
     _id: string;
     text: string;
+    image: string;
     parentId: string | null;
     author: {
       name: string;
@@ -29,7 +30,7 @@ interface Result {
         image: string;
       };
     }[];
-    imageurl: string; // Add imageurl to Result interface
+ 
   }[];
 }
 
@@ -78,7 +79,7 @@ async function TokiesTab({ currentUserId, accountId, accountType }: Props) {
           }
           createdAt={toky.createdAt}
           comments={toky.children}
-          imageurl={toky.imageurl} // Add imageurl prop
+          imageurl={toky.image} // Add imageurl prop
         />
       ))}
     </section>
