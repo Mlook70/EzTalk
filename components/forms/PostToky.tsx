@@ -3,7 +3,7 @@ import { useState, ChangeEvent } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter, usePathname, redirect } from 'next/navigation';
 import { useUploadThing } from '@/lib/uploadthing';
 import { isBase64Image } from '@/lib/utils';
 import { createToky } from '@/lib/actions/toky.action';
@@ -116,7 +116,7 @@ const PostToky = ({ userId }: Props) => {
         />
 
         {/* Submit button */}
-        <Button type="submit" className="from-violet-800 via-blue-700 to-sky-500 bg-gradient-to-r">
+        <Button type="submit" className="from-violet-800 via-blue-700 to-sky-500 bg-gradient-to-r reply-button">
           Post Toky
         </Button>
       </form>

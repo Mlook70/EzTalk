@@ -191,3 +191,61 @@ background: #7878a3;
 .maintenance-message {
 @apply text-base-regular mb-8;
 }
+
+/* Abdulmalek Akel */
+.view-button,
+.reply-icon,
+.delete-icon {
+@apply cursor-pointer transition-transform duration-200 ease-in-out;
+}
+
+.view-button:hover,
+.reply-icon:hover,
+.delete-icon:hover {
+@apply transform scale-110;
+}
+
+.view-button:active,
+.reply-icon:active,
+.delete-icon:active {
+@apply transform scale-90;
+}
+
+/* .reply-button {
+@apply cursor-pointer transition-transform duration-200 ease-in-out;
+@apply bg-gradient-to-r from-violet-800 via-blue-700 to-sky-500;
+}
+
+.reply-button:hover {
+@apply transform scale-105;
+}
+
+.reply-button:active {
+@apply transform scale-95;
+} */
+
+.edit-link {
+@apply cursor-pointer transition-transform duration-200 ease-in-out bg-dark-3 rounded-lg px-4 py-2;
+}
+
+.edit-link:hover {
+@apply transform scale-105;
+}
+
+.edit-link:active {
+@apply transform scale-95;
+}
+
+.loader {
+    border: 8px solid #00b7ff;
+    border-top: 8px solid #5900ff;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+0% { transform: rotate(0deg); }
+100% { transform: rotate(360deg); }
+}

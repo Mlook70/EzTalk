@@ -79,29 +79,24 @@ function TokyCard({
             )}
             <div className={`${isComment && "mb-10"} mt-5 flex flex-col gap-3`}>
               <div className="flex gap-3.5">
-                <Image
-                  src="/assets/heart-gray.svg"
-                  alt="heart"
-                  width={24}
-                  height={24}
-                  className="cursor-pointer object-contain"
-                />
                 <Link href={`/toky/${id}`}>
                   <Image
                     src="/assets/reply.svg"
-                    alt="heart"
+                    alt="reply"
                     width={24}
                     height={24}
-                    className="cursor-pointer object-contain"
+                    className="reply-icon object-contain"
                   />
                 </Link>
-                <Image
-                  src="/assets/share.svg"
-                  alt="heart"
-                  width={24}
-                  height={24}
-                  className="cursor-pointer object-contain"
-                />
+                <div className="delete-icon">
+                  <DeleteToky
+                    tokyId={JSON.stringify(id)}
+                    currentUserId={currentUserId}
+                    authorId={author.id}
+                    parentId={parentId}
+                    isComment={isComment}
+                  />
+                </div>
               </div>
               {isComment && comments.length > 0 && (
                 <Link href={`/toky/${id}`}>
@@ -113,14 +108,7 @@ function TokyCard({
             </div>
           </div>
         </div>
-        <div className="flex flex-col items-end mt-3 sm:mt-0">
-          <DeleteToky
-            tokyId={JSON.stringify(id)}
-            currentUserId={currentUserId}
-            authorId={author.id}
-            parentId={parentId}
-            isComment={isComment}
-          />
+        <div className="cursor-pointer object-contain">
           <p className="text-subtle-medium text-gray-1 mt-2 sm:mt-0">
             {formatDateString(createdAt)}
           </p>

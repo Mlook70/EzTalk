@@ -77,12 +77,12 @@ const Comment = ({ tokyId: tokyId, currentUserImg, currentUserId }: Props) => {
           )}
         />
 
-        <Button
-          className="bg-gradient-to-r from-violet-800 via-blue-700 to-sky-500"
-          type="submit"
-        >
-          Reply
-        </Button>
+          <Button
+            className="reply-button"
+            type="submit"
+          >
+            Reply
+          </Button>
       </form>
     </Form>
   );

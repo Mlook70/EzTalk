@@ -37,7 +37,7 @@ function UserCard({ id, name, username, imgUrl, personType }: Props) {
       </div>
 
       <Button
-        className='user-card_btn bg-gradient-to-r from-violet-800 via-blue-700 to-sky-500'
+        className='view-button user-card_btn from-violet-800 via-blue-700 to-sky-500 bg-gradient-to-r'
         onClick={() => {
           if (isCommunity) {
             router.push(`/communities/${id}`);
@@ -46,8 +46,8 @@ function UserCard({ id, name, username, imgUrl, personType }: Props) {
           }
         }}
       >
-        View
-      </Button>
+      View
+    </Button>
     </article>
   );
 }
