@@ -211,18 +211,18 @@ background: #7878a3;
 @apply transform scale-90;
 }
 
-/* .reply-button {
+.submit-button {
 @apply cursor-pointer transition-transform duration-200 ease-in-out;
 @apply bg-gradient-to-r from-violet-800 via-blue-700 to-sky-500;
 }
 
-.reply-button:hover {
+.submit-button:hover {
 @apply transform scale-105;
 }
 
-.reply-button:active {
+.submit-button:active {
 @apply transform scale-95;
-} */
+}
 
 .edit-link {
 @apply cursor-pointer transition-transform duration-200 ease-in-out bg-dark-3 rounded-lg px-4 py-2;
