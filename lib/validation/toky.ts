@@ -11,7 +11,7 @@ export const TokyValidation = z.object({
     message: "Toky contains inappropriate language."
   }),
   accountId: z.string(),
-  image:z.string().url().nonempty(),
+  image: z.string().url().or(z.literal('')),
 });
 export const CommentValidation = z.object({
   toky: z.string().nonempty().min(3, { message: "Minimum 3 characters." })

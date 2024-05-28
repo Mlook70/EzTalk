@@ -1,9 +1,10 @@
 "use client";
+
 import { useState, ChangeEvent } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { useRouter, usePathname, redirect } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useUploadThing } from '@/lib/uploadthing';
 import { isBase64Image } from '@/lib/utils';
 import { createToky } from '@/lib/actions/toky.action';
@@ -23,6 +24,7 @@ const PostToky = ({ userId }: Props) => {
   const { startUpload } = useUploadThing('media');
   const [files, setFiles] = useState<File[]>([]);
   const [loading, setLoading] = useState(false);
+  const [imageError, setImageError] = useState<string | null>(null);
   const form = useForm({
     resolver: zodResolver(TokyValidation),
     defaultValues: {
@@ -38,11 +40,14 @@ const PostToky = ({ userId }: Props) => {
 
     const blob = values.image;
     const hasImageChanged = isBase64Image(blob);
-    if (hasImageChanged) {
+    if (hasImageChanged && files.length > 0) {
       const imgRes = await startUpload(files);
       if (imgRes && imgRes[0]?.url) {
         values.image = imgRes[0].url;
       }
+    } else {
+      // If no image provided or changed, ensure image field is empty
+      values.image = '';
     }
 
     await createToky({
@@ -59,12 +64,19 @@ const PostToky = ({ userId }: Props) => {
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    const reader = new FileReader();
-
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 1024 * 1024) {
+        // Image size exceeds 1MB
+        setImageError("Image size exceeds 1MB. Please upload a smaller image, if you want to upload bigger subuscribe with VIP PREMIUM soon ^_^");
+        setFiles([]);
+        form.setValue('image', '');
+        return;
+      }
+      setImageError(null);
       setFiles([file]);
 
+      const reader = new FileReader();
       reader.onloadend = () => {
         const imageDataUrl = reader.result as string;
         form.setValue('image', imageDataUrl);
@@ -107,8 +119,11 @@ const PostToky = ({ userId }: Props) => {
               <FormControl>
                 <Input type="file" accept="image/*" className="no-focus text-light-1 outline-none bg-dark-2" onChange={handleImageChange} />
               </FormControl>
-              {field.value && (
+              {field.value && !imageError && (
                 <img src={field.value} alt="Preview" className="mt-2 h-48 w-full object-cover" />
+              )}
+              {imageError && (
+                <p className="text-red-500">{imageError}</p>
               )}
               <FormMessage />
             </FormItem>
@@ -116,7 +131,7 @@ const PostToky = ({ userId }: Props) => {
         />
 
         {/* Submit button */}
-        <Button type="submit" className="from-violet-800 via-blue-700 to-sky-500 bg-gradient-to-r reply-button">
+        <Button type="submit" className="from-violet-800 via-blue-700 to-sky-500 bg-gradient-to-r">
           Post Toky
         </Button>
       </form>
