@@ -1,4 +1,3 @@
-
 "use client";
 import { useState, ChangeEvent } from 'react';
 import { useForm } from 'react-hook-form';
@@ -23,6 +22,7 @@ const PostToky = ({ userId }: Props) => {
   const pathname = usePathname();
   const { startUpload } = useUploadThing('media');
   const [files, setFiles] = useState<File[]>([]);
+  const [loading, setLoading] = useState(false);
   const form = useForm({
     resolver: zodResolver(TokyValidation),
     defaultValues: {
@@ -33,6 +33,7 @@ const PostToky = ({ userId }: Props) => {
   });
 
   const onSubmit = async () => {
+    setLoading(true);
     const values = form.getValues() as z.infer<typeof TokyValidation>;
 
     const blob = values.image;
@@ -52,6 +53,7 @@ const PostToky = ({ userId }: Props) => {
       path: pathname,
     });
 
+    setLoading(false);
     router.push('/');
   };
 
@@ -74,13 +76,19 @@ const PostToky = ({ userId }: Props) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="mt-10 flex flex-col gap-10">
+        {loading && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+            <div className="loader">Loading...</div>
+          </div>
+        )}
+        
         {/* Textarea for toky content */}
         <FormField
           control={form.control}
           name="toky"
           render={({ field }) => (
             <FormItem className="flex flex-col gap-3">
-              <FormLabel className="text-base-semibold text-light-2">write your toky</FormLabel>
+              <FormLabel className="text-base-semibold text-light-2">Write your toky</FormLabel>
               <FormControl>
                 <Textarea {...field} rows={10} className="no-focus text-light-1 outline-none bg-dark-2" />
               </FormControl>

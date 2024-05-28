@@ -70,16 +70,35 @@
 @apply flex items-center justify-between gap-3 xs:gap-5;
 }
 
+/* Abdulmalek Akel  */
 .bottombar_link {
-@apply relative flex flex-col items-center gap-2 rounded-lg p-2 sm:flex-1 sm:px-2 sm:py-2.5;
+@apply relative flex flex-col items-center gap-2 rounded-lg p-2 transition-transform duration-300;
 }
+
+.bottombar_link:hover {
+@apply transform scale-105;
+}
+
+.bottombar_link.active {
+@apply transform scale-110 bg-gradient-to-r from-violet-800 via-blue-700 to-sky-500;
+}
+
 
 .leftsidebar {
 @apply sticky left-0 top-0 z-20 flex h-screen w-fit flex-col justify-between overflow-auto border-r border-r-dark-4 bg-dark-2 pb-5 pt-28 max-md:hidden;
 }
 
+/* Abdulmalek Akel  */
 .leftsidebar_link {
-@apply relative flex justify-start gap-4 rounded-lg p-4;
+@apply relative flex justify-start gap-4 rounded-lg p-4 transition-transform duration-300;
+}
+
+.leftsidebar_link:hover {
+@apply transform scale-105;
+}
+
+.leftsidebar_link.active {
+@apply transform scale-110 bg-gradient-to-r from-violet-800 via-blue-700 to-sky-500;
 }
 
 .pagination {
@@ -158,4 +177,17 @@ background: #7878a3;
 
 .comment-form_btn {
 @apply rounded-3xl bg-primary-500 px-8 py-2 !text-small-regular text-light-1 max-xs:w-full !important;
+}
+
+/* Abdulmalek Akel */
+.maintenance-container {
+@apply flex flex-col items-center justify-center min-h-screen bg-dark-1 text-light-1;
+}
+
+.maintenance-heading {
+@apply text-heading1-bold mb-4;
+}
+
+.maintenance-message {
+@apply text-base-regular mb-8;
 }
