@@ -47,5 +47,5 @@ export const profileTabs = [
 export const communityTabs = [
     { value: "tokies", label: "Tokies", icon: "/assets/reply.svg" },
     { value: "members", label: "Members", icon: "/assets/members.svg" },
-    { value: "requests", label: "Requests", icon: "/assets/request.svg" },
+    // { value: "requests", label: "Requests", icon: "/assets/request.svg" },
 ];
